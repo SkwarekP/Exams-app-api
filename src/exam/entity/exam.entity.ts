@@ -1,3 +1,5 @@
+import { Answers } from "src/answers/entity/answers.entity";
+import { Execution } from "src/executions/entities/execution.entity";
 import { Questions } from "src/questions/entity/questions.entity";
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
@@ -33,5 +35,10 @@ export class Exam {
     @OneToMany(() => Questions, questions => questions.exam)
     questions: Questions[]
 
+    @OneToMany(() => Answers, answers => answers.exam)
+    answers: Answers[]
+
+    @OneToMany(() => Execution, (execution) => execution.exam)
+    executions: Execution[]
 
 }
