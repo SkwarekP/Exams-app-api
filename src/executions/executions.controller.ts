@@ -8,8 +8,8 @@ export class ExecutionsController {
   constructor(private readonly executionsService: ExecutionsService) {}
 
   @Post()
-  create(@Body() createExecutionDto: CreateExecutionDto) {
-    return this.executionsService.create(createExecutionDto);
+  async create(@Body() createExecutionDto: CreateExecutionDto) {
+      return await this.executionsService.createExecution(createExecutionDto);
   }
 
   @Get()

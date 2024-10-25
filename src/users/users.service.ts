@@ -16,8 +16,8 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async getUser(userId: number) {
-    return this.userRepository.findOne({where: {userId}});
+  async getUser(userId: number): Promise<Users> {
+    return await this.userRepository.findOne({where: {userId}});
   }
 
   async create(createUserDto: CreateUserDto) {

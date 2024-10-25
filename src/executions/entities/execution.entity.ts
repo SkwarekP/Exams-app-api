@@ -1,6 +1,6 @@
 import { Exam } from "src/exam/entity/exam.entity";
 import { Users } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Execution {
@@ -10,11 +10,8 @@ export class Execution {
     @Column({ name: 'current_question', nullable: true})
     currentQuestion: string;
 
-    @Column({name: 'start_time'})
-    timeStart: string;
-
-    @Column({name: "end_time", nullable: true})
-    timeEnd: string;
+    @Column({name: "execution_end_time", nullable: true})
+    executionEndTime: string;
 
     @Column({nullable: true})
     duration: string;
@@ -25,17 +22,11 @@ export class Execution {
     @Column({name: "max_score"})
     maxScore: number;
 
-    @Column()
+    @Column({nullable: true})
     passed: boolean;
 
     @Column()
     status: string;
-
-    @Column({name: "created_at"})
-    createdAt: string;
-
-    @Column({name: "updated_at"})
-    updatedAt: string;
 
     @Column({name: "user_id"})
     userId: number;
@@ -44,10 +35,11 @@ export class Execution {
     examId: number;
 
     @ManyToOne(() => Users, (user) => user.executions)
+    @JoinColumn({name: "user_id"})
     user: Users;
 
     @ManyToOne(() => Exam, (exam) => exam.executions)
+    @JoinColumn({name: "exam_id"})
     exam: Exam;
-
 
 }

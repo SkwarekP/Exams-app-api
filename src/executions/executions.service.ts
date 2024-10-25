@@ -1,11 +1,37 @@
-import { Injectable } from '@nestjs/common';
-import { CreateExecutionDto } from './dto/create-execution.dto';
+import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { CreateExecutionDto, ExecutionCreationAttributes } from './dto/create-execution.dto';
 import { UpdateExecutionDto } from './dto/update-execution.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Execution } from './entities/execution.entity';
+import { Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
+import { ExamService } from 'src/exam/exam.service';
 
 @Injectable()
 export class ExecutionsService {
-  create(createExecutionDto: CreateExecutionDto) {
-    return 'This action adds a new execution';
+  constructor(
+    @InjectRepository(Execution)
+    private executionRepository: Repository<Execution>,
+    private userService: UsersService,
+  ){}
+  async createExecution(createExecutionDto: CreateExecutionDto): Promise<Execution> {
+    try {
+      const existingUser = await this.userService.getUser(createExecutionDto.userId)
+      const userHasExecutionOpen = await this.executionRepository.findOne({where: {userId: existingUser?.userId, examId: createExecutionDto.examId}})
+
+      if(userHasExecutionOpen) {
+        throw new ConflictException('This user already has open incompleted exam');
+      }
+
+      const execution = this.executionRepository.create(createExecutionDto as ExecutionCreationAttributes);
+      const createExecution = await this.executionRepository.save(execution);
+
+      console.error("Execution created successfully");
+      return createExecution;
+    } catch (error) {
+      console.error('Error creating execution:', error); // Log the error
+      throw new InternalServerErrorException('Failed to create execution. Please try again later.');
+    }
   }
 
   findAll() {
