@@ -1,5 +1,12 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateExecutionDto, ExecutionCreationAttributes } from './dto/create-execution.dto';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import {
+  CreateExecutionDto,
+  ExecutionCreationAttributes,
+} from './dto/create-execution.dto';
 import { UpdateExecutionDto } from './dto/update-execution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Execution } from './entities/execution.entity';
@@ -13,24 +20,39 @@ export class ExecutionsService {
     @InjectRepository(Execution)
     private executionRepository: Repository<Execution>,
     private userService: UsersService,
-  ){}
-  async createExecution(createExecutionDto: CreateExecutionDto): Promise<Execution> {
+  ) {}
+  async createExecution(
+    createExecutionDto: CreateExecutionDto,
+  ): Promise<Execution> {
     try {
-      const existingUser = await this.userService.getUser(createExecutionDto.userId)
-      const userHasExecutionOpen = await this.executionRepository.findOne({where: {userId: existingUser?.userId, examId: createExecutionDto.examId}})
+      const existingUser = await this.userService.getUser(
+        createExecutionDto.userId,
+      );
+      const userHasExecutionOpen = await this.executionRepository.findOne({
+        where: {
+          userId: existingUser?.userId,
+          examId: createExecutionDto.examId,
+        },
+      });
 
-      if(userHasExecutionOpen) {
-        throw new ConflictException('This user already has open incompleted exam');
+      if (userHasExecutionOpen) {
+        throw new ConflictException(
+          'This user already has open incompleted exam',
+        );
       }
 
-      const execution = this.executionRepository.create(createExecutionDto as ExecutionCreationAttributes);
+      const execution = this.executionRepository.create(
+        createExecutionDto as ExecutionCreationAttributes,
+      );
       const createExecution = await this.executionRepository.save(execution);
 
-      console.error("Execution created successfully");
+      console.error('Execution created successfully');
       return createExecution;
     } catch (error) {
       console.error('Error creating execution:', error); // Log the error
-      throw new InternalServerErrorException('Failed to create execution. Please try again later.');
+      throw new InternalServerErrorException(
+        'Failed to create execution. Please try again later.',
+      );
     }
   }
 

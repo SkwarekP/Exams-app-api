@@ -5,8 +5,6 @@
   "username": "patryk",
   "password": "admin",
   "database": "postgres",
-  "entities": [
-    "dist/**/*.entity.js"
-  ],
+  "entities": ["dist/**/*.entity.js"],
   "synchronize": true
 }

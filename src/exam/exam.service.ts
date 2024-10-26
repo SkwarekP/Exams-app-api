@@ -5,29 +5,34 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class ExamService {
-    constructor(
-        @InjectRepository(Exam)
-        private examRepository: Repository<Exam>
-    ) { }
+  constructor(
+    @InjectRepository(Exam)
+    private examRepository: Repository<Exam>,
+  ) {}
 
-    async getAllExams(): Promise<Exam[]> {
-        return this.examRepository.find({relations: ['questions']})
+  async getAllExams(): Promise<Exam[]> {
+    return this.examRepository.find({ relations: ['questions'] });
+  }
+
+  async getExam(examId: number): Promise<Exam> {
+    const exam = await this.examRepository.findOne({
+      where: { examId },
+      relations: ['questions'],
+    });
+    if (!exam) {
+      throw new NotFoundException('The exam with provided id not found');
     }
+    return exam;
+  }
 
-    async getExam(examId: number): Promise<Exam> {
-        const exam = await this.examRepository.findOne({where: {examId}, relations: ['questions']})
-        if(!exam) {
-            throw new NotFoundException('The exam with provided id not found');
-        }
-        return exam;
+  async findExamByName(examName: string): Promise<Exam> {
+    const exam = await this.examRepository.findOne({
+      where: { name: examName },
+      relations: ['questions'],
+    });
+    if (!exam) {
+      throw new NotFoundException('The exam with provided name not found');
     }
-
-    async findExamByName(examName: string): Promise<Exam> {
-        const exam = await this.examRepository.findOne({where: {name: examName}, relations: ['questions']})
-        if(!exam) {
-            throw new NotFoundException('The exam with provided name not found');
-        }
-        return exam;
-    }
-
+    return exam;
+  }
 }
