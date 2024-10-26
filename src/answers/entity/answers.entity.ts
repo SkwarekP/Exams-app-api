@@ -1,22 +1,29 @@
-import { Exam } from "src/exam/entity/exam.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Exam } from 'src/exam/entity/exam.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Answers {
-    @PrimaryGeneratedColumn({name: 'answer_id'})
-    answerId: number;
+  @PrimaryGeneratedColumn({ name: 'answer_id' })
+  answerId: number;
 
-    @Column({name: 'correct_answer'})
-    correctAnswer: string
+  @Column({ name: 'correct_answer' })
+  correctAnswer: string;
 
-    @Column({name: 'exam_id'})
-    examId: number;
+  @Column({ name: 'exam_id' })
+  examId: number;
 
-    @ManyToOne(() => Exam, exam => exam.answers)
-    @JoinColumn({name: 'exam_id'})
-    exam: Exam;
+  @ManyToOne(() => Exam, (exam) => exam.answers)
+  @JoinColumn({ name: 'exam_id' })
+  exam: Exam;
 
-    // @OneToOne(() => Questions)
-    // @JoinColumn({name: 'answer_id'})
-    // questions: Questions[]
+  // @OneToOne(() => Questions)
+  // @JoinColumn({name: 'answer_id'})
+  // questions: Questions[]
 }

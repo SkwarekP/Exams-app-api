@@ -8,15 +8,17 @@ async function bootstrap() {
   app.enableCors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  })
+  });
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-    errorHttpStatusCode: 400
-  }))
-  
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      errorHttpStatusCode: 400,
+    }),
+  );
+
   await app.listen(3002);
 }
 bootstrap();

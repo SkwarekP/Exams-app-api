@@ -9,15 +9,15 @@ import { Repository } from 'typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(Users)
-    private userRepository: Repository<Users>
-  ){}
+    private userRepository: Repository<Users>,
+  ) {}
 
   async getUsers(): Promise<Users[]> {
     return this.userRepository.find();
   }
 
   async getUser(userId: number): Promise<Users> {
-    return await this.userRepository.findOne({where: {userId}});
+    return await this.userRepository.findOne({ where: { userId } });
   }
 
   async create(createUserDto: CreateUserDto) {
