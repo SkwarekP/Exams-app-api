@@ -7,6 +7,7 @@ import { QuestionsModule } from './questions/questions.module';
 import { AnswersModule } from './answers/answers.module';
 import { ExecutionsModule } from './executions/executions.module';
 import { UsersModule } from './users/users.module';
+import { AppLoggerModule } from './AppLoggerModule';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     AnswersModule,
     ExecutionsModule,
     UsersModule,
+    AppLoggerModule
   ],
   controllers: [AppController],
   providers: [AppService],
