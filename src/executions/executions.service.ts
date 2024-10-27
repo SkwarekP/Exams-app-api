@@ -46,12 +46,12 @@ export class ExecutionsService {
       );
       const createExecution = await this.executionRepository.save(execution);
 
-      console.error('Execution created successfully');
+      console.warn('Execution created successfully');
       return createExecution;
     } catch (error) {
-      console.error('Error creating execution:', error); // Log the error
-      throw new InternalServerErrorException(
-        'Failed to create execution. Please try again later.',
+      console.error('Error creating execution:', error);
+      throw new ConflictException(
+        'This user already has open incompleted exam',
       );
     }
   }
