@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ExecutionAnswers } from '../executions.types';
 
 @Entity()
 export class Execution {
@@ -33,6 +34,12 @@ export class Execution {
 
   @Column()
   status: string;
+
+  @Column({name: 'answered_questions_amount'})
+  answeredQuestionsAmount: number;
+
+  @Column({type: 'jsonb', nullable: false})
+  answers: ExecutionAnswers[]
 
   @Column({ name: 'user_id' })
   userId: number;
