@@ -5,8 +5,10 @@ import {
   IsBoolean,
   IsOptional,
   IsNotEmpty,
-  IsIn,
+  IsArray,
+  IsNumber,
 } from 'class-validator';
+import { ExecutionAnswers } from '../executions.types';
 
 export type ExecutionCreationAttributes = Omit<
   Execution,
@@ -22,6 +24,10 @@ export class CreateExecutionDto {
 
   @IsString()
   currentQuestion: string;
+
+  @IsOptional()
+  @IsArray()
+  answers: ExecutionAnswers[]
 
   @IsString()
   @IsOptional()

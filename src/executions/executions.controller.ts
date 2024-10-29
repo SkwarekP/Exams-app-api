@@ -35,7 +35,7 @@ export class ExecutionsController {
     @Param('id') executionId: string,
     @Body() updateExecutionDto: UpdateExecutionDto,
   ) {
-    return this.executionsService.update(+executionId, updateExecutionDto);
+    return this.executionsService.updateExecution(executionId, updateExecutionDto);
   }
 
   @Delete('execution/:executionId')

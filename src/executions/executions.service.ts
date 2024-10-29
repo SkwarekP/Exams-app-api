@@ -1,7 +1,7 @@
 import {
   ConflictException,
   Injectable,
-  InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   CreateExecutionDto,
@@ -64,8 +64,16 @@ export class ExecutionsService {
     return `This action returns a #${id} execution`;
   }
 
-  update(id: number, updateExecutionDto: UpdateExecutionDto) {
-    return `This action updates a #${id} execution`;
+  async updateExecution(executionId: string, updateExecutionDto: UpdateExecutionDto): Promise<Execution> {
+    const execution = await this.executionRepository.findOne({where: {executionId: executionId}})
+    if(!execution) {
+      throw new NotFoundException('Execution not found');
+    }
+
+    //@TODO save new answer to the array correctly
+    const updateExecution = Object.assign(execution, updateExecutionDto)
+
+    return this.executionRepository.save(updateExecution)
   }
 
   remove(id: number) {
