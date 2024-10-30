@@ -38,7 +38,7 @@ export class Execution {
   @Column({name: 'answered_questions_amount'})
   answeredQuestionsAmount: number;
 
-  @Column({type: 'jsonb', nullable: false})
+  @Column({type: 'jsonb', nullable: true})
   answers: ExecutionAnswers[]
 
   @Column({ name: 'user_id' })
