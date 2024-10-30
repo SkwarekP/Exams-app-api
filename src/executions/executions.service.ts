@@ -70,10 +70,11 @@ export class ExecutionsService {
       throw new NotFoundException('Execution not found');
     }
 
+    console.log("execution", execution)
     //@TODO save new answer to the array correctly
     const updateExecution = Object.assign(execution, updateExecutionDto)
 
-    return this.executionRepository.save(updateExecution)
+    return updateExecution
   }
 
   remove(id: number) {

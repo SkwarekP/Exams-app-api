@@ -31,11 +31,11 @@ export class ExecutionsController {
   }
 
   @Patch('execution/:executionId')
-  update(
+  async update(
     @Param('id') executionId: string,
     @Body() updateExecutionDto: UpdateExecutionDto,
   ) {
-    return this.executionsService.updateExecution(executionId, updateExecutionDto);
+    return await this.executionsService.updateExecution(executionId, updateExecutionDto);
   }
 
   @Delete('execution/:executionId')
