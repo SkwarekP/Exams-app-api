@@ -11,7 +11,7 @@ export class ExamService {
   ) {}
 
   async getAllExams(): Promise<Exam[]> {
-    return this.examRepository.find({ relations: ['questions'] });
+    return this.examRepository.find({ relations: ['questions', 'executions'] });
   }
 
   async getExam(examId: number): Promise<Exam> {
