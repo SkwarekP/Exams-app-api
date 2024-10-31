@@ -2,6 +2,7 @@ import { Answers } from 'src/answers/entity/answers.entity';
 import { Execution } from 'src/executions/entities/execution.entity';
 import { Questions } from 'src/questions/entity/questions.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ExecutionIds } from '../exam-types';
 
 @Entity()
 export class Exam {
@@ -40,4 +41,5 @@ export class Exam {
 
   @OneToMany(() => Execution, (execution) => execution.exam)
   executions: Execution[];
+
 }
