@@ -12,7 +12,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Execution } from './entities/execution.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
-import { ExamService } from 'src/exam/exam.service';
 
 @Injectable()
 export class ExecutionsService {
@@ -75,6 +74,16 @@ export class ExecutionsService {
     const updateExecution = Object.assign(execution, updateExecutionDto)
 
     return updateExecution
+  }
+
+  async findExecution(executionId: string): Promise<Execution> {
+    const execution = await this.executionRepository.findOne({where: {executionId: executionId}})
+
+    if(!execution) {
+      throw new NotFoundException("Execution not found")
+    }
+
+    return execution;
   }
 
   remove(id: number) {

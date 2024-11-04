@@ -16,9 +16,9 @@ export class ExamController {
     return this.examService.getExam(id);
   }
 
-  @Get('/name/:name')
-  getExamByName(@Param('name') name: string) {
-    return this.examService.findExamByName(name);
+  @Get('/execution/:executionId')
+  getExamByName(@Param('executionId') executionId: string) {
+    return this.examService.findExamByExecutionId(executionId);
   }
 
   @Post()
