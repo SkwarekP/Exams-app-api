@@ -25,9 +25,13 @@ export class CreateExecutionDto {
   @IsString()
   currentQuestion: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  currentQuestionId: number;
+
   @IsOptional()
   @IsArray()
-  answers: ExecutionAnswers[]
+  answers: ExecutionAnswers
 
   @IsString()
   @IsOptional()

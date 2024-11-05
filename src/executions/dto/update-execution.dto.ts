@@ -6,15 +6,15 @@ import { ExecutionAnswers } from '../executions.types';
 export class UpdateExecutionDto extends PartialType(CreateExecutionDto) {
     @IsNotEmpty()
     @IsNumber()
-    userId: number;
-
+    currentQuestionId: number;
+    
     @IsNotEmpty()
     @IsString()
     currentQuestion: string;
 
     @IsNotEmpty()
     @IsObject()
-    answers: ExecutionAnswers[];
+    answers: ExecutionAnswers;
 
     @IsNumber()
     @IsNotEmpty()
