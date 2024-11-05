@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -40,13 +41,15 @@ export class ExecutionsService {
         );
       }
 
-      const execution = this.executionRepository.create(
-        createExecutionDto as ExecutionCreationAttributes,
+      const execution = {...createExecutionDto, answers: []}
+
+      const createExecution = this.executionRepository.create(
+        execution as ExecutionCreationAttributes,
       );
-      const createExecution = await this.executionRepository.save(execution);
+      const saveExecution = await this.executionRepository.save(createExecution);
 
       console.warn('Execution created successfully');
-      return createExecution;
+      return saveExecution;
     } catch (error) {
       console.error('Error creating execution:', error);
       throw new ConflictException(
@@ -63,19 +66,6 @@ export class ExecutionsService {
     return `This action returns a #${id} execution`;
   }
 
-  async updateExecution(executionId: string, updateExecutionDto: UpdateExecutionDto): Promise<Execution> {
-    const execution = await this.executionRepository.findOne({where: {executionId: executionId}})
-    if(!execution) {
-      throw new NotFoundException('Execution not found');
-    }
-
-    console.log("execution", execution)
-    //@TODO save new answer to the array correctly
-    const updateExecution = Object.assign(execution, updateExecutionDto)
-
-    return updateExecution
-  }
-
   async findExecution(executionId: string): Promise<Execution> {
     const execution = await this.executionRepository.findOne({where: {executionId: executionId}})
 
@@ -84,6 +74,39 @@ export class ExecutionsService {
     }
 
     return execution;
+  }
+
+  async updateExecution(executionId: string, updateExecutionDto: UpdateExecutionDto): Promise<Execution> {
+    const execution = await this.findExecution(executionId);
+    if(!execution) {
+      throw new NotFoundException('Execution not found');
+    }
+    
+    try {
+      execution.answers = execution.answers || [];
+
+      const existingAnswerIndex = execution.answers.findIndex(answer_ => answer_.questionId === updateExecutionDto.answers.questionId)
+
+      if(existingAnswerIndex !== -1) {
+        execution.answers[existingAnswerIndex].answer = updateExecutionDto.answers.answer;
+      } else {
+        execution.answers.push({
+          questionId: updateExecutionDto.answers.questionId,
+          answer: updateExecutionDto.answers.answer
+      });
+      }
+
+      execution.currentQuestion = updateExecutionDto.currentQuestion;
+      execution.currentQuestionId = updateExecutionDto.currentQuestionId;
+      execution.answeredQuestionsAmount = updateExecutionDto.answeredQuestionsAmount;
+      execution.passed = updateExecutionDto.passed ?? null;
+  
+      return await this.executionRepository.save(execution)
+
+    } catch (error) {
+      throw new BadRequestException("Cannot update the execution");
+    }
+
   }
 
   remove(id: number) {

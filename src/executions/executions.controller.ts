@@ -26,13 +26,13 @@ export class ExecutionsController {
   }
 
   @Get('execution/:executionId')
-  getExecution(@Param('id') executionId: string) {
-    return this.executionsService.findOne(+executionId);
+  getExecution(@Param('executionId') executionId: string) {
+    return this.executionsService.findExecution(executionId);
   }
 
   @Patch('execution/:executionId')
   async update(
-    @Param('id') executionId: string,
+    @Param('executionId') executionId: string,
     @Body() updateExecutionDto: UpdateExecutionDto,
   ) {
     return await this.executionsService.updateExecution(executionId, updateExecutionDto);

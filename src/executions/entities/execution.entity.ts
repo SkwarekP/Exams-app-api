@@ -17,6 +17,9 @@ export class Execution {
   @Column({ name: 'current_question', nullable: true })
   currentQuestion: string;
 
+  @Column({name: "current_question_id"})
+  currentQuestionId: number;
+
   @Column({ name: 'execution_end_time', nullable: true })
   executionEndTime: string;
 
