@@ -109,15 +109,15 @@ export class ExecutionsService {
       });
       }
 
-      execution.currentQuestion = updateExecutionDto.currentQuestion;
-      execution.currentQuestionId = updateExecutionDto.currentQuestionId;
+      execution.currentQuestion = updateExecutionDto.currentQuestion ?? '';
+      execution.currentQuestionId = updateExecutionDto.currentQuestionId ?? 0;
       execution.answeredQuestionsAmount = updateExecutionDto.answeredQuestionsAmount;
       execution.passed = updateExecutionDto.passed ?? null;
   
       return await this.executionRepository.save(execution)
 
     } catch (error) {
-      throw new BadRequestException("Cannot update the execution");
+      throw new BadRequestException("Cannot update the execution due to: ", error.message);
     }
 
   }

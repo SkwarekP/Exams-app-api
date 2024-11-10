@@ -50,6 +50,9 @@ export class Execution {
   @Column({ name: 'exam_id' })
   examId: number;
 
+  @Column({name: 'created_at'})
+  createdAt: string;
+
   @ManyToOne(() => Users, (user) => user.executions)
   @JoinColumn({ name: 'user_id' })
   user: Users;
