@@ -20,9 +20,9 @@ export class ExecutionsController {
     return await this.executionsService.createExecution(createExecutionDto);
   }
 
-  @Get()
-  getAllExecutions() {
-    return this.executionsService.findAll();
+  @Get(':userId')
+  getAllExecutions(@Param('userId') userId: number) {
+    return this.executionsService.getAllExecutions(userId);
   }
 
   @Get('execution/:executionId')
