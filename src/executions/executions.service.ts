@@ -58,12 +58,24 @@ export class ExecutionsService {
     }
   }
 
-  findAll() {
-    return `This action returns all executions`;
-  }
+  async getAllExecutions(userId: number): Promise<Execution[]> {
+    try {
+      const user = await this.userService.getUser(userId)
+      if(!user) {
+        throw new NotFoundException('User not found')
+      }
 
-  findOne(id: number) {
-    return `This action returns a #${id} execution`;
+      const executions = await this.executionRepository.find({
+        where: {
+          userId: user.userId
+        },
+        relations: ['user', 'exam']
+      })
+
+      return executions;
+    } catch (error) {
+      throw new BadRequestException(`there was some troubles during fetching executions, error: ${error}`)
+    }
   }
 
   async findExecution(executionId: string): Promise<Execution> {
@@ -92,7 +104,8 @@ export class ExecutionsService {
       } else {
         execution.answers.push({
           questionId: updateExecutionDto.answers.questionId,
-          answer: updateExecutionDto.answers.answer
+          answer: updateExecutionDto.answers.answer,
+          questionOrder: updateExecutionDto.answers.questionOrder
       });
       }
 
