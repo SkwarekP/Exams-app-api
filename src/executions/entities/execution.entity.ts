@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ExecutionAnswers } from '../executions.types';
+import { ExecutionAnswers, ExecutionStatus } from '../executions.types';
 
 @Entity()
 export class Execution {
@@ -36,7 +36,7 @@ export class Execution {
   passed: boolean;
 
   @Column()
-  status: string;
+  status: ExecutionStatus;
 
   @Column({name: 'answered_questions_amount'})
   answeredQuestionsAmount: number;

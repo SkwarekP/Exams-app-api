@@ -4,3 +4,5 @@ export interface ExecutionAnswers {
     answer:string,
     questionOrder: number
 }
+
+export type ExecutionStatus = 'PENDING' | 'COMPLETED' | 'NOT_STARTED'

@@ -109,10 +109,11 @@ export class ExecutionsService {
       });
       }
 
-      execution.currentQuestion = updateExecutionDto.currentQuestion ?? '';
-      execution.currentQuestionId = updateExecutionDto.currentQuestionId ?? 0;
+      execution.currentQuestion = updateExecutionDto.currentQuestion;
+      execution.currentQuestionId = updateExecutionDto.currentQuestionId;
       execution.answeredQuestionsAmount = updateExecutionDto.answeredQuestionsAmount;
       execution.passed = updateExecutionDto.passed ?? null;
+      execution.status = updateExecutionDto.status ?? 'PENDING';
   
       return await this.executionRepository.save(execution)
 

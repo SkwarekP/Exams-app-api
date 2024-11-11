@@ -8,7 +8,7 @@ import {
   IsArray,
   IsNumber,
 } from 'class-validator';
-import { ExecutionAnswers } from '../executions.types';
+import { ExecutionAnswers, ExecutionStatus } from '../executions.types';
 
 export type ExecutionCreationAttributes = Omit<
   Execution,
@@ -53,5 +53,5 @@ export class CreateExecutionDto {
   passed: boolean;
 
   @IsString()
-  status: string;
+  status: ExecutionStatus;
 }
