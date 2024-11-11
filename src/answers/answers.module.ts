@@ -3,9 +3,10 @@ import { AnswersController } from './answers.controller';
 import { AnswersService } from './answers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Answers } from './entity/answers.entity';
+import { ExecutionsModule } from 'src/executions/executions.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Answers])],
+  imports: [TypeOrmModule.forFeature([Answers]), ExecutionsModule],
   controllers: [AnswersController],
   providers: [AnswersService],
 })

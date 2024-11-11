@@ -1,13 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Answers } from './entity/answers.entity';
 import { Repository } from 'typeorm';
+import { CorrectAnswers } from './answers.types';
+import { ExecutionsService } from 'src/executions/executions.service';
+import { isNotEmpty } from 'class-validator';
 
 @Injectable()
 export class AnswersService {
   constructor(
     @InjectRepository(Answers)
     private answersRepository: Repository<Answers>,
+    private executionService: ExecutionsService,
   ) {}
 
   async getAllAnswers(): Promise<Answers[]> {
@@ -15,18 +19,28 @@ export class AnswersService {
   }
 
   async getAnswersByExamId(
-    examId: number,
-  ): Promise<{ answerId: number; correctAnswer: string }[]> {
-    const answers = await this.answersRepository.find({
-      where: { examId: examId },
-      relations: ['exam'],
-    });
+    executionId: string,
+  ): Promise<CorrectAnswers[]> {
 
-    const mappedData = answers.map((item) => {
-      return { answerId: item.answerId, correctAnswer: item.correctAnswer };
-    });
+    try {
+      const execution = await this.executionService.findExecution(executionId)
 
-    return mappedData;
+      if(!execution) {
+        throw new NotFoundException("Execution not found")
+      }
+
+      const answers = await this.answersRepository.find({
+        where: {examId: execution.examId}
+      })
+
+      const mappedAnswers = answers.map((answer) => {
+        return {answerId: answer.answerId, correctAnswer: answer.correctAnswer}
+      })
+
+      return mappedAnswers;
+    } catch (error) {
+      throw new InternalServerErrorException("There is an error in Answers Service: ", error.message)
+    }
   }
 
   async getCorrectAnswer(questionId: number): Promise<string> {

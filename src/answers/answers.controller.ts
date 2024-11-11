@@ -15,9 +15,9 @@ export class AnswersController {
     return this.answersService.getCorrectAnswer(id);
   }
 
-  @Get('/exam/:examId')
-  getAllCorrectAnswersFromExam(@Param('examId') examId: number) {
-    return this.answersService.getAnswersByExamId(examId);
+  @Get('/execution/:executionId')
+  getAllCorrectAnswersFromExam(@Param('executionId') executionId: string) {
+    return this.answersService.getAnswersByExamId(executionId);
   }
 
   @Put('/update/:examId')
