@@ -1,24 +1,27 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Answers } from './entity/answers.entity';
 import { Repository } from 'typeorm';
 import { CorrectAnswers } from './answers.types';
 import { ExecutionsService } from 'src/executions/executions.service';
-import { isNotEmpty } from 'class-validator';
+import { ExamService } from 'src/exam/exam.service';
 
 @Injectable()
 export class AnswersService {
   constructor(
     @InjectRepository(Answers)
     private answersRepository: Repository<Answers>,
+    @Inject(forwardRef(() => ExecutionsService)) 
     private executionService: ExecutionsService,
+    @Inject(forwardRef(() => ExamService))
+    private examService: ExamService
   ) {}
 
   async getAllAnswers(): Promise<Answers[]> {
     return this.answersRepository.find();
   }
 
-  async getAnswersByExamId(
+  async getAnswersByExecutionId(
     executionId: string,
   ): Promise<CorrectAnswers[]> {
 
@@ -31,6 +34,30 @@ export class AnswersService {
 
       const answers = await this.answersRepository.find({
         where: {examId: execution.examId}
+      })
+
+      const mappedAnswers = answers.map((answer) => {
+        return {answerId: answer.answerId, correctAnswer: answer.correctAnswer}
+      })
+
+      return mappedAnswers;
+    } catch (error) {
+      throw new InternalServerErrorException("There is an error in Answers Service: ", error.message)
+    }
+  }
+
+  async getAnswersByExamId(
+    examId: number,
+  ): Promise<CorrectAnswers[]> {
+    try {
+      const exam = await this.examService.getExam(examId)
+
+      if(!exam) {
+        throw new NotFoundException("Exam not found while getting answers by exam id")
+      }
+
+      const answers = await this.answersRepository.find({
+        where: {examId: exam.examId}
       })
 
       const mappedAnswers = answers.map((answer) => {

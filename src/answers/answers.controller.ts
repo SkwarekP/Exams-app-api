@@ -17,7 +17,7 @@ export class AnswersController {
 
   @Get('/execution/:executionId')
   getAllCorrectAnswersFromExam(@Param('executionId') executionId: string) {
-    return this.answersService.getAnswersByExamId(executionId);
+    return this.answersService.getAnswersByExecutionId(executionId);
   }
 
   @Put('/update/:examId')
