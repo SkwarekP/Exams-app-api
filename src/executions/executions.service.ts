@@ -1,6 +1,8 @@
 import {
   BadRequestException,
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -13,6 +15,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Execution } from './entities/execution.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
+import { ExamService } from 'src/exam/exam.service';
+import { AnswersService } from 'src/answers/answers.service';
 
 @Injectable()
 export class ExecutionsService {
@@ -20,6 +24,9 @@ export class ExecutionsService {
     @InjectRepository(Execution)
     private executionRepository: Repository<Execution>,
     private userService: UsersService,
+    @Inject(forwardRef(() => ExamService)) 
+    private readonly examService: ExamService,
+    private answersService: AnswersService,
   ) {}
   async createExecution(
     createExecutionDto: CreateExecutionDto,
@@ -90,8 +97,13 @@ export class ExecutionsService {
 
   async updateExecution(executionId: string, updateExecutionDto: UpdateExecutionDto): Promise<Execution> {
     const execution = await this.findExecution(executionId);
+    const exam = await this.examService.findExamByExecutionId(executionId)
     if(!execution) {
       throw new NotFoundException('Execution not found');
+    }
+
+    if(!exam){
+      throw new NotFoundException('Exam not found');
     }
     
     try {
@@ -106,7 +118,12 @@ export class ExecutionsService {
           questionId: updateExecutionDto.answers.questionId,
           answer: updateExecutionDto.answers.answer,
           questionOrder: updateExecutionDto.answers.questionOrder
-      });
+      })};
+
+      if(execution.answers.length === exam.questionsAmount) {
+        const correctAnswers = await this.answersService.getAnswersByExamId(exam.examId)
+        const score = execution.answers.filter((item, index) => item.answer === correctAnswers[index].correctAnswer).length
+        execution.score = score;
       }
 
       execution.currentQuestion = updateExecutionDto.currentQuestion;
@@ -114,6 +131,7 @@ export class ExecutionsService {
       execution.answeredQuestionsAmount = updateExecutionDto.answeredQuestionsAmount;
       execution.passed = updateExecutionDto.passed ?? null;
       execution.status = updateExecutionDto.status ?? 'PENDING';
+      
   
       return await this.executionRepository.save(execution)
 
