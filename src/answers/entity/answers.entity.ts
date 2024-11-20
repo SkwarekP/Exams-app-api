@@ -17,7 +17,7 @@ export class Answers {
   correctAnswer: string;
 
   @Column({ name: 'exam_id' })
-  examId: number;
+  examId: string;
 
   @ManyToOne(() => Exam, (exam) => exam.answers)
   @JoinColumn({ name: 'exam_id' })
