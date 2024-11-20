@@ -11,7 +11,7 @@ export class QuestionsController {
   }
 
   @Get(':id')
-  getQuestionsForExam(@Param('id') id: number) {
-    return this.questionService.getQuestionsForProvidedExam(id);
+  getQuestionsForExam(@Param('questionId') questionId: string) {
+    return this.questionService.getQuestionsForProvidedExam(questionId);
   }
 }

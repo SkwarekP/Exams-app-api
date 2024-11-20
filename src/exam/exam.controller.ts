@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { ExamDto } from './Dto/exam.dto';
+import { Body, Controller, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { ExamService } from './exam.service';
+import { CreateExamDto } from './Dto/create-exam.dto';
 
 @Controller('exams')
 export class ExamController {
@@ -12,8 +12,8 @@ export class ExamController {
   }
 
   @Get(':id')
-  getExam(@Param('id') id: number) {
-    return this.examService.getExam(id);
+  getExam(@Param('examId') examId: string) {
+    return this.examService.getExam(examId);
   }
 
   @Get('/execution/:executionId')
@@ -22,8 +22,11 @@ export class ExamController {
   }
 
   @Post()
-  createExam(@Body() createExam: ExamDto) {
-    return {};
+  createExam(@Body() createExam: CreateExamDto) {
+    if(!createExam){
+      throw new NotFoundException("No exam data sent");
+    } 
+    return this.examService.createExam(createExam);
   }
 
   @Put(':id')

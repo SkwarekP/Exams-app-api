@@ -47,7 +47,7 @@ export class AnswersService {
   }
 
   async getAnswersByExamId(
-    examId: number,
+    examId: string,
   ): Promise<CorrectAnswers[]> {
     try {
       const exam = await this.examService.getExam(examId)

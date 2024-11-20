@@ -14,7 +14,7 @@ export class QuestionsService {
     return this.questions.find();
   }
 
-  async getQuestionsForProvidedExam(examId: number): Promise<Questions[]> {
+  async getQuestionsForProvidedExam(examId: string): Promise<Questions[]> {
     const questions = await this.questions.find({ where: { examId: examId } });
     if (!questions || questions.length === 0)
       throw new NotFoundException(

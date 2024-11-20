@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   IsArray,
   IsNumber,
+  IsUUID,
 } from 'class-validator';
 import { ExecutionAnswers, ExecutionStatus } from '../executions.types';
 
@@ -20,7 +21,8 @@ export class CreateExecutionDto {
   userId: number;
 
   @IsNotEmpty()
-  examId: number;
+  @IsUUID()
+  examId: string;
 
   @IsString()
   currentQuestion: string;

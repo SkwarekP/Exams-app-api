@@ -48,7 +48,7 @@ export class Execution {
   userId: number;
 
   @Column({ name: 'exam_id' })
-  examId: number;
+  examId: string;
 
   @Column({name: 'created_at'})
   createdAt: string;

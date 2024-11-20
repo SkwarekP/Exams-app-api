@@ -12,10 +12,10 @@ import {
 @Entity()
 export class Questions {
   @PrimaryGeneratedColumn({ name: 'question_id' })
-  questionId: number;
+  questionId: string;
 
   @Column({ name: 'exam_id' })
-  examId: number;
+  examId: string;
 
   @Column({ name: 'question_content' })
   question: string;
