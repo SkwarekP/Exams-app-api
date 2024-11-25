@@ -1,4 +1,4 @@
 export interface CorrectAnswers {
-    answerId: number,
+    answerId: string,
     correctAnswer: string
 }

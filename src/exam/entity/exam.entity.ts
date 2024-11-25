@@ -9,7 +9,7 @@ export class Exam {
   examId: string;
 
   @Column({ nullable: true })
-  time: number;
+  time: string;
 
   @Column({ name: 'created_at' })
   createdAt: Date;

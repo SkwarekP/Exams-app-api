@@ -27,6 +27,7 @@ export class Questions {
   @JoinColumn({ name: 'exam_id' })
   exam: Exam;
 
-  @OneToOne(() => Answers)
-  correctAnswer: Answers;
+  // @OneToOne(() => Answers, (answer) => answer.questions, {cascade: true})
+  // @JoinColumn({ name: 'question_id' })
+  // correctAnswer: Answers;
 }

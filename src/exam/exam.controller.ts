@@ -23,9 +23,6 @@ export class ExamController {
 
   @Post()
   createExam(@Body() createExam: CreateExamDto) {
-    if(!createExam){
-      throw new NotFoundException("No exam data sent");
-    } 
     return this.examService.createExam(createExam);
   }
 

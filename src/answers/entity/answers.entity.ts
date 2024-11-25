@@ -1,4 +1,5 @@
 import { Exam } from 'src/exam/entity/exam.entity';
+import { Questions } from 'src/questions/entity/questions.entity';
 import {
   Column,
   Entity,
@@ -11,7 +12,7 @@ import {
 @Entity()
 export class Answers {
   @PrimaryGeneratedColumn({ name: 'answer_id' })
-  answerId: number;
+  answerId: string;
 
   @Column({ name: 'correct_answer' })
   correctAnswer: string;
@@ -23,7 +24,7 @@ export class Answers {
   @JoinColumn({ name: 'exam_id' })
   exam: Exam;
 
-  // @OneToOne(() => Questions)
-  // @JoinColumn({name: 'answer_id'})
-  // questions: Questions[]
+  @OneToOne(() => Questions, (question) => question.questionId)
+  @JoinColumn({name: 'answer_id'})
+  questions: Questions;
 }

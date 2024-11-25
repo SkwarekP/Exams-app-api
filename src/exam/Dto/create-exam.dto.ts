@@ -1,5 +1,6 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { Questions } from "../exam-types";
+import { Exam } from "../entity/exam.entity";
 
 export class CreateExamDto {
     @IsNotEmpty()
@@ -36,4 +37,9 @@ export class CreateExamDto {
     questions: Questions[];
 
   }
+
+  export type ExamCreationAttributes = Omit<
+  Exam,
+  'createdAt' | 'questions' | 'answers' | 'executions'
+>;
   
