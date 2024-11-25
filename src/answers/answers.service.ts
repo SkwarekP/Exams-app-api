@@ -1,13 +1,17 @@
-import { forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Answers } from './entity/answers.entity';
 import { Repository } from 'typeorm';
 import { CorrectAnswers } from './answers.types';
 import { ExecutionsService } from 'src/executions/executions.service';
 import { ExamService } from 'src/exam/exam.service';
+import { AnswersCreationAttributes, CreateAnswersDto } from './Dto/create-answers.dto';
 
 @Injectable()
 export class AnswersService {
+  addAnswer(examId: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository(Answers)
     private answersRepository: Repository<Answers>,
@@ -70,20 +74,28 @@ export class AnswersService {
     }
   }
 
-  async getCorrectAnswer(questionId: number): Promise<string> {
+  async getCorrectAnswer(questionId: string): Promise<string> {
     const correctAnswer = await this.answersRepository.findOne({
       where: { answerId: questionId },
     });
     if (!correctAnswer) {
       throw new NotFoundException(
-        'Ops... there is no correct answer in database',
+        'There is no correct answer in database',
       );
     }
 
     return correctAnswer.correctAnswer;
   }
 
-  async addAnswer(examId: number): Promise<string> {
-    return 'x';
+  async addAnswerToDatabase(createAnswersDto: CreateAnswersDto[]): Promise<Answers[]> {
+    try {
+      const createAnswers = this.answersRepository.create(createAnswersDto);
+
+      return await this.answersRepository.save(createAnswers);
+
+    } catch (error) {
+        throw new BadRequestException(`Failed to insert answers: ${error.message}`)
+    }
   }
+
 }

@@ -5,10 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Exam } from './entity/exam.entity';
 import { ExecutionsModule } from 'src/executions/executions.module';
 import { AnswersModule } from 'src/answers/answers.module';
+import { QuestionsModule } from 'src/questions/questions.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Exam]),
+    QuestionsModule,
+    UsersModule,
     forwardRef(() => ExecutionsModule),
     forwardRef(() => AnswersModule)
   ],

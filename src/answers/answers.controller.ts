@@ -11,7 +11,7 @@ export class AnswersController {
   }
 
   @Get(':id')
-  getAnswer(@Param('id') id: number) {
+  getAnswer(@Param('id') id: string) {
     return this.answersService.getCorrectAnswer(id);
   }
 
@@ -21,7 +21,7 @@ export class AnswersController {
   }
 
   @Put('/update/:examId')
-  updateAnswers(@Param('examId') examId: number) {
+  updateAnswers(@Param('examId') examId: string) {
     return this.answersService.addAnswer(examId);
   }
 }
