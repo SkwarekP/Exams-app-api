@@ -3,14 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Questions } from './entity/questions.entity';
 import { Repository } from 'typeorm';
 import { CreateQuestions } from './Dto/create-questions.dto';
-import { AnswersService } from 'src/answers/answers.service';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectRepository(Questions)
     private questionsRepository: Repository<Questions>,
-    private answersService: AnswersService
   ) {}
 
   async getAllQuestions(): Promise<Questions[]> {
@@ -37,20 +35,6 @@ export class QuestionsService {
         questionsMapped
       )
       await this.questionsRepository.save(createQuestions)
-
-      const answers = questions.map((question) => {
-        const correctAnswerObj = question.answers.find((answer) => answer.isCorrect);
-
-        //TABLE ANSWERS TO REMOVE
-
-        return {
-          answerId: question.questionId,
-          correctAnswer: correctAnswerObj.answer,
-          examId: question.examId
-        }
-      })
-
-      await this.answersService.addAnswerToDatabase(answers)
 
       console.warn('Questions have been added successfully');
     } catch (error) {

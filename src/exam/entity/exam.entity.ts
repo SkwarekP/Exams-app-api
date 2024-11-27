@@ -12,7 +12,7 @@ export class Exam {
   time: string;
 
   @Column({ name: 'created_at' })
-  createdAt: Date;
+  createdAt: string;
 
   @Column()
   level: number;

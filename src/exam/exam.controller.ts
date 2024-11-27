@@ -17,8 +17,12 @@ export class ExamController {
   }
 
   @Get('/execution/:executionId')
-  getExamByName(@Param('executionId') executionId: string) {
-    return this.examService.findExamByExecutionId(executionId);
+  getExamByExecutionId(
+    @Param('executionId') executionId: string,
+    @Query('summary') summary?: string
+  ) {
+    const includeSummary = summary === "true"
+    return this.examService.findExamByExecutionId(executionId, includeSummary);
   }
 
   @Post()

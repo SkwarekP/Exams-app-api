@@ -27,9 +27,9 @@ export class CreateExecutionDto {
   @IsString()
   currentQuestion: string;
 
-  @IsNumber()
+  @IsUUID()
   @IsNotEmpty()
-  currentQuestionId: number;
+  currentQuestionId: string;
 
   @IsOptional()
   @IsArray()

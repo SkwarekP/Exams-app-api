@@ -6,6 +6,7 @@ import { ExecutionsService } from 'src/executions/executions.service';
 import { CreateExamDto } from './Dto/create-exam.dto';
 import { UsersService } from 'src/users/users.service';
 import { QuestionsService } from 'src/questions/questions.service';
+import { ExamDto } from './Dto/exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -18,7 +19,7 @@ export class ExamService {
   ) { }
 
   async getAllExams(): Promise<Exam[]> {
-    return this.examRepository.find({ relations: ['questions', 'executions'] });
+    return await this.examRepository.find({ relations: ['questions', 'executions'] })
   }
 
   async createExam(createExamDto: CreateExamDto): Promise<void> {
@@ -59,14 +60,15 @@ export class ExamService {
       where: { examId },
       relations: ['questions'],
     });
+
     if (!exam) {
       throw new NotFoundException('The exam with provided id not found');
     }
+
     return exam;
   }
 
-  async findExamByExecutionId(executionId: string): Promise<Exam> {
-
+  async findExamByExecutionId(executionId: string, includeSummary?: boolean): Promise<ExamDto | Exam> {
     try {
       const execution = await this.executionService.findExecution(executionId)
       const exam = await this.examRepository.findOne({
@@ -78,7 +80,23 @@ export class ExamService {
         throw new NotFoundException('Exam not found');
       }
 
-      return exam;
+      const examDto: ExamDto = {
+        examId: exam.examId,
+        name: exam.name,
+        answersAmount: exam.answersAmount,
+        category: exam.category,
+        level: exam.level,
+        time: exam.time,
+        questionsAmount: exam.questionsAmount,
+        status: exam.status,
+        questions: exam.questions.map((question) => ({
+          questionId: question.questionId,
+          question: question.question,
+          answers: question.answers, // Include only answers, exclude correctAnswer
+        })),
+      }
+
+      return includeSummary ? exam : examDto;
     } catch (error) {
       throw new BadRequestException("Exam cannot be found due to: ", error.message)
     }

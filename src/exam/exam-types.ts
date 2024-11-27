@@ -12,4 +12,11 @@ export interface Questions {
     questionId: string;
     question: string;
     answers: Answers[];
+    correctAnswer: string;
   }
+
+export interface QuestionsDuringExam {
+    questionId: string;
+    question: string;
+    answers: string[];
+}
