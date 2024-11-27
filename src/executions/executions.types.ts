@@ -1,7 +1,7 @@
 
 export interface ExecutionAnswers {
     questionId: number,
-    answer:string,
+    answer: string,
     questionOrder: number
 }
 

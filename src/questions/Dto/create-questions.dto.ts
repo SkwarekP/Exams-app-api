@@ -14,6 +14,10 @@ export class CreateQuestions {
     @IsArray()
     @IsNotEmpty()
     answers: Answers[];
+
+    @IsString()
+    @IsNotEmpty()
+    correctAnswer: string;
     
     @IsString()
     @IsNotEmpty()

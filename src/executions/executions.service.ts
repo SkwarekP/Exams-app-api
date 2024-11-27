@@ -17,6 +17,7 @@ import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { ExamService } from 'src/exam/exam.service';
 import { AnswersService } from 'src/answers/answers.service';
+import { Questions } from 'src/questions/entity/questions.entity';
 
 @Injectable()
 export class ExecutionsService {
@@ -97,7 +98,7 @@ export class ExecutionsService {
 
   async updateExecution(executionId: string, updateExecutionDto: UpdateExecutionDto): Promise<Execution> {
     const execution = await this.findExecution(executionId);
-    const exam = await this.examService.findExamByExecutionId(executionId)
+    const exam = await this.examService.findExamByExecutionId(executionId, true)
     if(!execution) {
       throw new NotFoundException('Execution not found');
     }
@@ -106,6 +107,7 @@ export class ExecutionsService {
       throw new NotFoundException('Exam not found');
     }
     
+    console.log(exam);
     try {
       execution.answers = execution.answers || [];
 
@@ -121,8 +123,8 @@ export class ExecutionsService {
       })};
 
       if(execution.answers.length === exam.questionsAmount) {
-        const correctAnswers = await this.answersService.getAnswersByExamId(exam.examId)
-        const score = execution.answers.filter((item, index) => item.answer === correctAnswers[index].correctAnswer).length
+        const correctAnswers = exam.questions.map((question: Questions) => question.correctAnswer)
+        const score = execution.answers.filter((item, index) => item.answer === correctAnswers[index]).length
         execution.score = score;
       }
 
@@ -136,7 +138,7 @@ export class ExecutionsService {
       return await this.executionRepository.save(execution)
 
     } catch (error) {
-      throw new BadRequestException("Cannot update the execution due to: ", error.message);
+      throw new BadRequestException(`Cannot update the execution due to: ${error.message}`);
     }
 
   }
