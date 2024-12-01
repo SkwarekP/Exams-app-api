@@ -5,10 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Execution } from './entities/execution.entity';
 import { UsersModule } from 'src/users/users.module';
 import { ExamModule } from 'src/exam/exam.module';
-import { AnswersModule } from 'src/answers/answers.module';
+// import { AnswersModule } from 'src/answers/answers.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Execution]), UsersModule, forwardRef(() => AnswersModule), forwardRef(() => ExamModule)],
+  imports: [TypeOrmModule.forFeature([Execution]), UsersModule, forwardRef(() => ExamModule)],
   controllers: [ExecutionsController],
   providers: [ExecutionsService],
   exports: [ExecutionsService],

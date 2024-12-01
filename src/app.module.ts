@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExamModule } from './exam/exam.module';
 import { QuestionsModule } from './questions/questions.module';
-import { AnswersModule } from './answers/answers.module';
+// import { AnswersModule } from './answers/answers.module';
 import { ExecutionsModule } from './executions/executions.module';
 import { UsersModule } from './users/users.module';
 import { AppLoggerModule } from './AppLoggerModule';
@@ -23,7 +23,7 @@ import { AppLoggerModule } from './AppLoggerModule';
     }),
     ExamModule,
     QuestionsModule,
-    AnswersModule,
+    // AnswersModule,
     ExecutionsModule,
     UsersModule,
     AppLoggerModule

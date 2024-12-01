@@ -16,7 +16,6 @@ import { Execution } from './entities/execution.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { ExamService } from 'src/exam/exam.service';
-import { AnswersService } from 'src/answers/answers.service';
 import { Questions } from 'src/questions/entity/questions.entity';
 
 @Injectable()
@@ -27,7 +26,6 @@ export class ExecutionsService {
     private userService: UsersService,
     @Inject(forwardRef(() => ExamService)) 
     private readonly examService: ExamService,
-    private answersService: AnswersService,
   ) {}
   async createExecution(
     createExecutionDto: CreateExecutionDto,
