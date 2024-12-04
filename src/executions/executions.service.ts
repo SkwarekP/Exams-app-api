@@ -31,21 +31,21 @@ export class ExecutionsService {
     createExecutionDto: CreateExecutionDto,
   ): Promise<Execution> {
     try {
-      const existingUser = await this.userService.getUser(
-        createExecutionDto.userId,
-      );
-      const userHasExecutionOpen = await this.executionRepository.findOne({
-        where: {
-          userId: existingUser?.userId,
-          examId: createExecutionDto.examId,
-        },
-      });
+      // const existingUser = await this.userService.getUser(
+      //   createExecutionDto.userId,
+      // );
+      // const userHasExecutionOpen = await this.executionRepository.findOne({
+      //   where: {
+      //     userId: existingUser?.userId,
+      //     examId: createExecutionDto.examId,
+      //   },
+      // });
 
-      if (userHasExecutionOpen) {
-        throw new ConflictException(
-          'This user already has open incompleted exam',
-        );
-      }
+      // if (userHasExecutionOpen) {
+      //   throw new ConflictException(
+      //     'This user already has open incompleted exam',
+      //   );
+      // }
 
       const execution = {...createExecutionDto, answers: []}
 
