@@ -34,7 +34,11 @@ export class AuthService {
 
         try {
             const user = await this.userService.getUserByName(userDto.username);
-            await bcrypt.compare(userDto.password, user.password);
+            const isPasswordMatched = await bcrypt.compare(userDto.password, user.password);
+            
+            if(!isPasswordMatched){
+                throw new UnauthorizedException("Invalid password")
+            }
             
             return user;
 
