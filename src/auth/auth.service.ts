@@ -5,7 +5,6 @@ import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { AuthRes, SignIn } from './auth.types';
-import { MOCK_USER } from './mock/mock-user';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +33,11 @@ export class AuthService {
 
         try {
             const user = await this.userService.getUserByName(userDto.username);
-            await bcrypt.compare(userDto.password, user.password);
+            const isPasswordMatched = await bcrypt.compare(userDto.password, user.password);
+
+            if(!isPasswordMatched){
+                throw new UnauthorizedException("Invalid password")
+            }
             
             return user;
 

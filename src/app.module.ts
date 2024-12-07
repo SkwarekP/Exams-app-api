@@ -9,25 +9,28 @@ import { UsersModule } from './users/users.module';
 import { AppLoggerModule } from './AppLoggerModule';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'patryk',
-      password: 'admin',
-      database: 'exams',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async(configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: parseInt(configService.get<string>('DATABASE_PORT'), 10), // Ensure it's a number
+        username: configService.get<string>('DATABASE_USERNAME'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: false,
+      })
     }),
-    ExamModule,
-    QuestionsModule,
-    ExecutionsModule,
-    UsersModule,
-    AppLoggerModule,
-    AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env.local'
+    }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -35,7 +38,13 @@ import { ThrottlerModule } from '@nestjs/throttler';
           limit: 10
         }
       ]
-    })
+    }),
+    ExamModule,
+    QuestionsModule,
+    ExecutionsModule,
+    UsersModule,
+    AppLoggerModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
