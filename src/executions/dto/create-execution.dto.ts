@@ -6,7 +6,6 @@ import {
   IsOptional,
   IsNotEmpty,
   IsArray,
-  IsNumber,
   IsUUID,
 } from 'class-validator';
 import { ExecutionAnswers, ExecutionStatus } from '../executions.types';
@@ -18,7 +17,8 @@ export type ExecutionCreationAttributes = Omit<
 
 export class CreateExecutionDto {
   @IsNotEmpty()
-  userId: number;
+  @IsUUID()
+  userId: string;
 
   @IsNotEmpty()
   @IsUUID()

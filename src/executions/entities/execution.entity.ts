@@ -1,5 +1,5 @@
 import { Exam } from 'src/exam/entity/exam.entity';
-import { Users } from 'src/users/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -45,7 +45,7 @@ export class Execution {
   answers: ExecutionAnswers[]
 
   @Column({ name: 'user_id' })
-  userId: number;
+  userId: string;
 
   @Column({ name: 'exam_id' })
   examId: string;
@@ -53,9 +53,9 @@ export class Execution {
   @Column({name: 'created_at'})
   createdAt: string;
 
-  @ManyToOne(() => Users, (user) => user.executions)
+  @ManyToOne(() => User, (user) => user.executions)
   @JoinColumn({ name: 'user_id' })
-  user: Users;
+  user: User;
 
   @ManyToOne(() => Exam, (exam) => exam.executions)
   @JoinColumn({ name: 'exam_id' })

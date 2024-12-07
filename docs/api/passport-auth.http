@@ -1,0 +1,7 @@
+POST http://localhost:3002/authv2/login
+content-type: application/json
+
+{
+    "username": "exampleUser",
+    "password": "admin1234"
+}

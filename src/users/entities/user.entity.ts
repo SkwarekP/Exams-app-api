@@ -8,14 +8,19 @@ import {
 import { Role } from '../types/user.interface';
 import { IsEmail } from 'class-validator';
 import { Execution } from 'src/executions/entities/execution.entity';
+import { Exclude } from 'class-transformer';
 
-@Entity()
-export class Users {
-  @PrimaryGeneratedColumn({ name: 'user_id' })
-  userId: number;
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn('uuid', { name: 'user_id' })
+  userId: string;
 
   @Column()
   username: string;
+
+  @Column()
+  @Exclude()
+  password: string;
 
   @Column({ name: 'first_name' })
   firstName: string;

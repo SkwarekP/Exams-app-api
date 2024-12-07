@@ -64,7 +64,7 @@ export class ExecutionsService {
     }
   }
 
-  async getAllExecutions(userId: number): Promise<Execution[]> {
+  async getAllExecutions(userId: string): Promise<Execution[]> {
     try {
       const user = await this.userService.getUser(userId)
       if(!user) {

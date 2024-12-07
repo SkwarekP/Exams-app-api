@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import { Questions } from "../exam-types";
 import { Exam } from "../entity/exam.entity";
 
@@ -9,8 +9,8 @@ export class CreateExamDto {
     //temporary userId
     //it will be got from current session
     @IsNotEmpty()
-    @IsNumber()
-    userId: number;
+    @IsUUID()
+    userId: string;
 
     @IsNotEmpty()
     @IsNumber()
