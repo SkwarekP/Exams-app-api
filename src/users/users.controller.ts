@@ -22,12 +22,12 @@ export class UsersController {
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.createNewUser(createUserDto);
   }
 
   @Get(':id')
   GetUser(@Param('id') id: string) {
-    return this.usersService.getUser(+id);
+    return this.usersService.getUser(id);
   }
 
   @Patch(':id')

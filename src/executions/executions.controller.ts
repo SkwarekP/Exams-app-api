@@ -21,7 +21,7 @@ export class ExecutionsController {
   }
 
   @Get(':userId')
-  getAllExecutions(@Param('userId') userId: number) {
+  getAllExecutions(@Param('userId') userId: string) {
     return this.executionsService.getAllExecutions(userId);
   }
 
