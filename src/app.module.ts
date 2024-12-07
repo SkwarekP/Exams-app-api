@@ -8,7 +8,8 @@ import { ExecutionsModule } from './executions/executions.module';
 import { UsersModule } from './users/users.module';
 import { AppLoggerModule } from './AppLoggerModule';
 import { AuthModule } from './auth/auth.module';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -31,13 +32,19 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ThrottlerModule.forRoot({
       throttlers: [
         {
-          ttl: 60,
+          ttl: 6000,
           limit: 10
         }
       ]
     })
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    },
+    AppService
+  ],
 })
 export class AppModule {}

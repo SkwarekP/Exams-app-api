@@ -5,7 +5,6 @@ import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { AuthRes, SignIn } from './auth.types';
-import { MOCK_USER } from './mock/mock-user';
 
 @Injectable()
 export class AuthService {

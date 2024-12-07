@@ -1,15 +1,15 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LogInDto } from './Dto/logInDto';
 import { AuthGuard } from './guards/auth.guard';
 import { PassportLocalGuard } from './guards/passport-local.guard';
 import { PassportJwtAuthGuard } from './guards/passport-jwt.guard';
+import { Throttle } from '@nestjs/throttler';
 
-@Controller('authv2')
+@Controller('auth')
 export class PassportAuthController {
     constructor(private readonly authService: AuthService) {}
 
-    // @HttpCode(HttpStatus.OK)
+    @Throttle({default: {limit: 10, ttl: 10}})
     @Post('login')
     @UseGuards(PassportLocalGuard)
     async logIntoTheApplication(
