@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
+import { PassportJwtAuthGuard } from './auth/guards/passport-jwt.guard';
 
 @Module({
   imports: [
@@ -48,7 +49,7 @@ import { ConfigModule } from '@nestjs/config';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard
+      useClass: PassportJwtAuthGuard
     },
     AppService,
   ],

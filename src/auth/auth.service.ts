@@ -51,13 +51,22 @@ export class AuthService {
             sub: user.userId,
             username: user.username
         }
+        const expiresIn = 3600;
+        const issuedAt = Math.floor(Date.now() / 1000);
+        const expirationTime = issuedAt + expiresIn;
 
         const accessToken = await this.jwtService.signAsync(tokenPayload);
+
+        const readableIssuedAt = new Date(issuedAt * 1000).toLocaleString();
+        const readableExpiresAt = new Date(expirationTime * 1000).toLocaleString();
+
 
         return {
             accessToken,
             username: user.username,
-            userId: user.userId
+            userId: user.userId,
+            createdAt: readableIssuedAt,
+            expiresAt: readableExpiresAt
         }
     }
 }
