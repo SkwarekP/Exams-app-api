@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +20,9 @@ async function bootstrap() {
       errorHttpStatusCode: 400,
     }),
   );
+
+  app.use(cookieParser());
+  // app.useGlobalGuards(new PassportJwtAuthGuard(app.get(JwtService))); // Use JwtService for JWT verification
 
   await app.listen(3002);
 }
