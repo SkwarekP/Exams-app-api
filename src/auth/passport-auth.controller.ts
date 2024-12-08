@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './guards/auth.guard';
 import { PassportLocalGuard } from './guards/passport-local.guard';
 import { PassportJwtAuthGuard } from './guards/passport-jwt.guard';
 import { Throttle } from '@nestjs/throttler';
+import {Response} from 'express'
 
 @Controller('auth')
 export class PassportAuthController {
@@ -13,12 +13,21 @@ export class PassportAuthController {
     @Post('login')
     @UseGuards(PassportLocalGuard)
     async logIntoTheApplication(
-        @Request() req
+        @Request() res,
+        @Res({ passthrough: true }) response: Response
     ) {
-        return await this.authService.signIn({
-            userId: req.user.userId,
-            username: req.user.username
+        const login = await this.authService.signIn({
+            userId: res.user.userId,
+            username: res.user.username
         });
+        response.cookie('authToken', res.accessToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 1000,
+            sameSite: 'strict'
+        })
+
+        return login;
     }
 
     @UseGuards(PassportJwtAuthGuard)
@@ -27,4 +36,15 @@ export class PassportAuthController {
         return req.user;
     }
     
+
+    @Post('logout')
+    async logout(@Res() res) {
+        res.cookie('authToken', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+            maxAge: 0,
+          });
+          res.status(200).send('Wylogowano!');
+    }
 }

@@ -1,7 +1,0 @@
-POST http://localhost:3002/auth-v2/login
-content-type: application/json
-
-{
-    "username": "patrykdoe",
-    "password": "zz"
-}

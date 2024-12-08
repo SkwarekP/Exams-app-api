@@ -10,16 +10,21 @@ import { AppLoggerModule } from './AppLoggerModule';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env.local',
+      isGlobal: true
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'patryk',
-      password: 'admin',
-      database: 'exams',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
     }),
@@ -38,13 +43,14 @@ import { APP_GUARD } from '@nestjs/core';
       ]
     })
   ],
+
   controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard
     },
-    AppService
+    AppService,
   ],
 })
 export class AppModule {}
