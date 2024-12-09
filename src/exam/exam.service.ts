@@ -7,6 +7,7 @@ import { CreateExamDto } from './Dto/create-exam.dto';
 import { UsersService } from 'src/users/users.service';
 import { QuestionsService } from 'src/questions/questions.service';
 import { ExamDto } from './Dto/exam.dto';
+import { QuestionsDuringExam } from './exam-types';
 
 @Injectable()
 export class ExamService {
@@ -18,8 +19,33 @@ export class ExamService {
     private questionsService: QuestionsService
   ) { }
 
-  async getAllExams(): Promise<Exam[]> {
-    return await this.examRepository.find({ relations: ['questions', 'executions'] })
+  async getAllExams(): Promise<ExamDto[]> {
+
+    try {
+      const exams = await this.examRepository.find({ relations: ['questions', 'executions'] })
+      
+      const transformedExams: ExamDto[] = exams.map((exam) => ({
+        examId: exam.examId,
+        name: exam.name,
+        answersAmount: exam.answersAmount,
+        category: exam.category,
+        level: exam.level,
+        time: exam.time,
+        questionsAmount: exam.questionsAmount,
+        status: exam.status,
+        createdAt: exam.createdAt,
+        questions: exam.questions.map(({ questionId, question, answers }) => ({
+          questionId,
+          question,
+          answers,
+        })) as QuestionsDuringExam[], 
+      }));
+
+      return transformedExams;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+
   }
 
   async createExam(createExamDto: CreateExamDto): Promise<void> {
