@@ -20,10 +20,6 @@ export class Answers {
   @Column({ name: 'exam_id' })
   examId: string;
 
-  @ManyToOne(() => Exam, (exam) => exam.answers)
-  @JoinColumn({ name: 'exam_id' })
-  exam: Exam;
-
   @OneToOne(() => Questions, (question) => question.questionId)
   @JoinColumn({name: 'answer_id'})
   questions: Questions;

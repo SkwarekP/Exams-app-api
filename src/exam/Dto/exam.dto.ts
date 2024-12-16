@@ -1,3 +1,4 @@
+import { User } from "src/users/entities/user.entity";
 import { QuestionsDuringExam } from "../exam-types";
 
 export class ExamDto {
@@ -12,5 +13,6 @@ export class ExamDto {
   questionsAmount: number;
   questions: QuestionsDuringExam[];
   status: string;
+  users?: User[];
   createdAt?: string;
 }

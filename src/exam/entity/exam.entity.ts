@@ -1,7 +1,7 @@
-import { Answers } from 'src/answers/entity/answers.entity';
 import { Execution } from 'src/executions/entities/execution.entity';
 import { Questions } from 'src/questions/entity/questions.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class Exam {
@@ -35,10 +35,24 @@ export class Exam {
   @OneToMany(() => Questions, (questions) => questions.exam)
   questions: Questions[];
 
-  @OneToMany(() => Answers, (answers) => answers.exam)
-  answers: Answers[];
-
   @OneToMany(() => Execution, (execution) => execution.exam)
   executions: Execution[];
+
+  // @ManyToMany(() => User, (user) => user.exams)
+  // users: User[];
+
+  @ManyToMany(() => User, (user) => user.exams)
+  @JoinTable({
+    name: 'user_exams', // Explicitly specify the join table name here
+    joinColumn: {
+      name: 'exam_id', // Column in `user_exams` that references `Exam`
+      referencedColumnName: 'examId', // Primary key in `Exam`
+    },
+    inverseJoinColumn: {
+      name: 'user_id', // Column in `user_exams` that references `User`
+      referencedColumnName: 'userId', // Primary key in `User`
+    },
+  })
+  users: User[];
 
 }
