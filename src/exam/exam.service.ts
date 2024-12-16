@@ -22,7 +22,7 @@ export class ExamService {
   async getAllExams(): Promise<ExamDto[]> {
 
     try {
-      const exams = await this.examRepository.find({ relations: ['questions', 'executions'] })
+      const exams = await this.examRepository.find({ relations: ['questions', 'executions', 'users'] })
       
       const transformedExams: ExamDto[] = exams.map((exam) => ({
         examId: exam.examId,
@@ -34,6 +34,7 @@ export class ExamService {
         questionsAmount: exam.questionsAmount,
         status: exam.status,
         createdAt: exam.createdAt,
+        users: exam.users,
         questions: exam.questions.map(({ questionId, question, answers }) => ({
           questionId,
           question,
@@ -43,7 +44,7 @@ export class ExamService {
 
       return transformedExams;
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(`there was an error: ${error.message}`);
     }
 
   }

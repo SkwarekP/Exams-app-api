@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -9,6 +11,7 @@ import { Role } from '../types/user.interface';
 import { IsEmail } from 'class-validator';
 import { Execution } from 'src/executions/entities/execution.entity';
 import { Exclude } from 'class-transformer';
+import { Exam } from 'src/exam/entity/exam.entity';
 
 @Entity('users')
 export class User {
@@ -44,4 +47,8 @@ export class User {
 
   @OneToMany(() => Execution, (execution) => execution.user)
   executions: Execution[];
+
+  @ManyToMany(() => Exam, (exam) => exam.users)
+  exams: Exam[];
+  
 }
