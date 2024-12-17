@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { QuestionsService } from 'src/questions/questions.service';
 import { ExamDto } from './Dto/exam.dto';
 import { QuestionsDuringExam } from './exam-types';
+import { AssignedUserExams } from './Dto/assigned-user-exams.dto';
 
 @Injectable()
 export class ExamService {
@@ -47,6 +48,40 @@ export class ExamService {
       throw new InternalServerErrorException(`there was an error: ${error.message}`);
     }
 
+  }
+
+  async getExamsAssignedToUser(userId: string): Promise<AssignedUserExams[]> {
+    try {
+      const exams = await this.examRepository.find({ relations: ['questions', 'users']})
+
+      const filteredExams = exams.filter((exam) => exam.users.some((user) => user.userId === userId));
+      
+      if(filteredExams.length === 0) {
+        throw new NotFoundException("This user hasn't assigned any exam yet.")
+      }
+
+      const transformedExams: AssignedUserExams[] = filteredExams.map((exam) => ({
+        examId: exam.examId,
+        name: exam.name,
+        answersAmount: exam.answersAmount,
+        category: exam.category,
+        level: exam.level,
+        time: exam.time,
+        questionsAmount: exam.questionsAmount,
+        status: exam.status,
+        createdAt: exam.createdAt,
+        questions: exam.questions.map(({ questionId, question, answers }) => ({
+          questionId,
+          question,
+          answers,
+        })) as QuestionsDuringExam[], 
+      }));
+
+      return transformedExams;
+
+    } catch (error) {
+      throw new InternalServerErrorException(`There was an error during ${error.message}`)
+    }
   }
 
   async createExam(createExamDto: CreateExamDto): Promise<void> {
