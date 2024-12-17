@@ -1,4 +1,4 @@
-POST http://localhost:3002/authv2/login
+POST http://localhost:3002/auth/login
 content-type: application/json
 
 {

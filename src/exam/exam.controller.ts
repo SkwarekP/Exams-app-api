@@ -11,6 +11,11 @@ export class ExamController {
     return this.examService.getAllExams();
   }
 
+  @Get('/user/:userId')
+  getUserExams(@Param('userId') userId: string) {
+    return this.examService.getExamsAssignedToUser(userId)
+  }
+
   @Get(':id')
   getExam(@Param('examId') examId: string) {
     return this.examService.getExam(examId);
@@ -21,7 +26,7 @@ export class ExamController {
     @Param('executionId') executionId: string,
     @Query('summary') summary?: string
   ) {
-    const includeSummary = summary === "true"
+    const includeSummary = summary === "true";
     return this.examService.findExamByExecutionId(executionId, includeSummary);
   }
 
