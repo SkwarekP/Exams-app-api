@@ -21,10 +21,10 @@ export class AuthService {
                 throw new UnauthorizedException();
             }
 
-            return await this.signIn({userId: user.userId, username: user.username})
+            return await this.signIn({userId: user.userId, username: user.username, role: user.role})
             
         } catch (error) {
-
+            throw new UnauthorizedException("The user authentication has been failed")
         }
 
     }
@@ -65,6 +65,7 @@ export class AuthService {
             accessToken,
             username: user.username,
             userId: user.userId,
+            role: user.role,
             createdAt: readableIssuedAt,
             expiresAt: readableExpiresAt
         }

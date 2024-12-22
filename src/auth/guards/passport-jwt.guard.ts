@@ -15,6 +15,6 @@ export class PassportJwtAuthGuard extends AuthGuard('jwt') {
             return true;
         }
 
-        return super.canActivate(context); // Apply passport auth
+        return super.canActivate(context);
     }
 }

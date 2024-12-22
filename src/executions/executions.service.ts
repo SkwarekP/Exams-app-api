@@ -71,11 +71,12 @@ export class ExecutionsService {
         throw new NotFoundException('User not found')
       }
 
+      console.log(user);
       const executions = await this.executionRepository.find({
         where: {
           userId: user.userId
         },
-        relations: ['user', 'exam']
+        relations: ['exam']
       })
 
       return executions;
