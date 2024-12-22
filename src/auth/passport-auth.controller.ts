@@ -18,7 +18,8 @@ export class PassportAuthController {
     ) {
         const login = await this.authService.signIn({
             userId: res.user.userId,
-            username: res.user.username
+            username: res.user.username,
+            role: res.user.role
         });
         return login;
     }

@@ -6,12 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ExecutionsService } from './executions.service';
 import { CreateExecutionDto } from './dto/create-execution.dto';
 import { UpdateExecutionDto } from './dto/update-execution.dto';
+import { Roles } from 'src/auth/public.decorator';
+import { Role } from 'src/users/types/user.interface';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Controller('executions')
+@UseGuards(RolesGuard)
 export class ExecutionsController {
   constructor(private readonly executionsService: ExecutionsService) {}
 
@@ -21,6 +26,7 @@ export class ExecutionsController {
   }
 
   @Get(':userId')
+  @Roles(Role.Admin, Role.Participant)
   getAllExecutions(@Param('userId') userId: string) {
     return this.executionsService.getAllExecutions(userId);
   }
